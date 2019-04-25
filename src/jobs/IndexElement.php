@@ -46,7 +46,7 @@ class IndexElement extends BaseJob
     public function init()
     {
         parent::init();
-        $this->index = Scout::$plugin->scoutService->getClient()->initIndex($this->indexName);
+
     }
 
     /**
@@ -54,6 +54,10 @@ class IndexElement extends BaseJob
      */
     public function execute($queue)
     {
+        if (!$this->index) {
+          $this->index = Scout::$plugin->scoutService->getClient()->initIndex($this->indexName);
+        }
+
         $this->index->saveObject($this->element);
     }
 

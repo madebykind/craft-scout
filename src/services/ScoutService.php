@@ -11,7 +11,8 @@
 
 namespace rias\scout\services;
 
-use AlgoliaSearch\Client;
+use Algolia\AlgoliaSearch\SearchClient;
+use Algolia\AlgoliaSearch\Config\SearchConfig;
 use Craft;
 use craft\base\Component;
 use rias\scout\models\AlgoliaIndex;
@@ -77,9 +78,15 @@ class ScoutService extends Component
      */
     public function getClient()
     {
-        if ($this->client !== null) {
-            $this->client = new Client($this->settings->application_id, $this->settings->admin_api_key);
-            $this->client->setConnectTimeout($this->settings->connect_timeout);
+        if (!$this->client) {
+
+            $config = SearchConfig::create(
+              $this->settings->application_id,
+              $this->settings->admin_api_key
+            );
+            $config->setConnectTimeout($this->settings->connect_timeout);
+
+            $this->client = SearchClient::createWithConfig($config);
         }
 
         return $this->client;
