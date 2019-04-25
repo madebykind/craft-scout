@@ -54,7 +54,7 @@ class IndexElement extends BaseJob
      */
     public function execute($queue)
     {
-        $this->index->addObject($this->element);
+        $this->index->saveObject($this->element);
     }
 
     // Protected Methods
