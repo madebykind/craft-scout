@@ -49,7 +49,6 @@ class DeIndexElement extends BaseJob
     public function init()
     {
         parent::init();
-        $this->index = Scout::$plugin->scoutService->getClient()->initIndex($this->indexName);
     }
 
     /**
@@ -60,6 +59,10 @@ class DeIndexElement extends BaseJob
      */
     public function execute($queue)
     {
+        if (!$this->index) {
+            $this->index = Scout::$plugin->scoutService->getClient()->initIndex($this->indexName);
+        }
+
         if ($this->distinctId !== null) {
             $this->index->deleteBy([
                 'filters' => 'distinctId:'.$this->distinctId,
